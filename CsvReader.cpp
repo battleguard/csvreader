@@ -16,8 +16,8 @@ CsvFile CsvReader::Parse(std::string aFileName)
       std::stringstream   headerStream(headers);
       for (std::string header; std::getline(headerStream, header, ',');)
       {
-         CsvColumn column = { header, static_cast<int>(file.Columns.size())};
-         file.Columns.push_back(column);
+         CsvColumn column = { header, static_cast<int>(file.size())};
+         file.push_back(column);
       }
    }
    { // get data
@@ -25,13 +25,12 @@ CsvFile CsvReader::Parse(std::string aFileName)
       {
          std::stringstream   lineStream(line);
          std::string cell;
-         for(auto& column : file.Columns)
+         for(auto& column : file)
          {
             std::getline(lineStream, cell, ',');
-            column.Data.push_back(std::stod(cell));
+            column.push_back(std::stod(cell));
          }
       }
-      file.ColumnLength = static_cast<int>(file.Columns.front().Data.size());
    }
    return file;
 }

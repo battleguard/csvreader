@@ -1,18 +1,23 @@
 #pragma once
 #include <istream>
+#include <utility>
 #include <vector>
 
-struct CsvColumn
+class CsvColumn : public std::vector<double>
 {
-   std::string Header;
-   int ColumnIndex;
-   std::vector<double> Data;
+public:
+   CsvColumn(std::string aHeader, int aColumnIndex)
+      : Header(std::move(aHeader)),
+        ColumnIndex(aColumnIndex) {}
+
+   const std::string Header;
+   const int ColumnIndex;
 };
 
-struct CsvFile
+class CsvFile : public std::vector<CsvColumn>
 {
-   std::vector<CsvColumn> Columns;
-   int ColumnLength;
+public:
+   size_t GetColumnLength() const { return empty() ? 0 : at(0).size(); }
 };
 
 struct CsvReader 
